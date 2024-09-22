@@ -8,26 +8,34 @@ import logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# Necesitamos cargar las credenciales de Marvel (public_key, private_key)
+# Cargar las credenciales de Marvel desde variables de entorno
 MARVEL_PUBLIC_KEY = os.getenv("MARVEL_PUBLIC_KEY")
 MARVEL_PRIVATE_KEY = os.getenv("MARVEL_PRIVATE_KEY")
 
-logger.info(f"Public Key: {MARVEL_PUBLIC_KEY}, Private Key: {MARVEL_PRIVATE_KEY}")
-
 
 def get_marvel_character(name: str):
-    # Marvel API Base URL
+    """
+    Fetch details about a Marvel character by name from the Marvel API.
+
+    Args:
+    - name (str): Name of the Marvel character.
+
+    Returns:
+    - dict: Character details from the Marvel API.
+
+    Raises:
+    - ValueError: If no character is found or the API returns an error.
+    """
     base_url = "http://gateway.marvel.com/v1/public/characters"
 
-    # Timestap, hash y autenticación
-    ts = str(int(time.time()))  # Cambia el timestamp a un entero
+    # Timestap y hash para la autenticación
+    ts = str(int(time.time()))
     hash_md5 = hashlib.md5(
         f"{ts}{MARVEL_PRIVATE_KEY}{MARVEL_PUBLIC_KEY}".encode("utf-8")
     ).hexdigest()
 
     # Parámetros de la solicitud
     params = {"name": name, "apikey": MARVEL_PUBLIC_KEY, "ts": ts, "hash": hash_md5}
-    logger.info(f"URL: {base_url}, Params: {params}")
 
     try:
         # Hacer la solicitud a la API de Marvel
@@ -35,15 +43,15 @@ def get_marvel_character(name: str):
         data = response.json()
 
         # Registrar detalles completos de la respuesta
-        logger.info(f"Response Status Code: {response.status_code}")
-        logger.info(f"Response Body: {data}")
+        logger.info("Response Status Code: %s", response.status_code)
+        logger.info("Response Body: %s", data)
 
         # Si la solicitud fue exitosa y contiene resultados
         if response.status_code == 200 and data["data"]["results"]:
             return data["data"]["results"][0]
         else:
             # Si no se encuentra el personaje o hay otro error
-            logger.error(f"Marvel API Error: {data}")
+            logger.error("Marvel API Error: %s", data)
             raise ValueError(f"Character not found or API error: {data}")
 
     except requests.exceptions.Timeout:
@@ -51,5 +59,5 @@ def get_marvel_character(name: str):
         raise
 
     except requests.exceptions.RequestException as e:
-        logger.error(f"Request failed: {e}")
+        logger.error("Request failed: %s", e)
         raise
