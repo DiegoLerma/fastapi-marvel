@@ -1,6 +1,6 @@
 # API de Marvel con FastAPI 🚀
 
-![Captura de pantalla de OpenAPI]([assets/ss.png](https://img.goodfon.com/original/2560x1440/1/b4/marvel-logo-logotip-krasnyy.jpg))
+![Marvel](https://img.goodfon.com/original/1920x1080/f/fa/marvel-komiksy-zheleznyy.jpg)
 
 ![Marvel API](https://img.shields.io/badge/Marvel%20API-Integración-red?logo=marvel&style=for-the-badge)
 ![FastAPI](https://img.shields.io/badge/FastAPI-Framework-009688?logo=fastapi&style=for-the-badge)
