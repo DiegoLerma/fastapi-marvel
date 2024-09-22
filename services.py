@@ -1,8 +1,8 @@
 import hashlib
 import time
 import os
-import requests
 import logging
+import requests
 
 # Configuración básica de logging
 logging.basicConfig(level=logging.INFO)
@@ -31,7 +31,8 @@ def get_marvel_character(name: str):
     # Timestap y hash para la autenticación
     ts = str(int(time.time()))
     hash_md5 = hashlib.md5(
-        f"{ts}{MARVEL_PRIVATE_KEY}{MARVEL_PUBLIC_KEY}".encode("utf-8")
+        f"{ts}{MARVEL_PRIVATE_KEY}{MARVEL_PUBLIC_KEY}".encode("utf-8"),
+        usedforsecurity=False
     ).hexdigest()
 
     # Parámetros de la solicitud
